@@ -172,9 +172,7 @@ These metrics should be considered together with cluster sizes, feature profiles
 |---|
 | Michael Andreas Tjendra |
 | Diky Diwa Suwanto |
-| Muhammad Rizki |
-| Bagas Arma |
-| Andika Dermawan |
+| Enjel Boyzest Saragih |
 
 ## License
 
