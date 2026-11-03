@@ -1,0 +1,8 @@
+Finding,Evidence,Implication
+Missing Values,gender: 1337 (8.91%); age: 2496 (16.64%),Tentukan strategi penanganan missing values pada tahap preprocessing.
+Full Duplicate Rows,266 rows (1.77%).,Lakukan investigasi sebelum memutuskan apakah baris duplikat perlu dihapus.
+Age Data Quality,276 non-missing values cannot be converted to numeric.,Perlu investigasi terhadap format age sebelum digunakan dalam analisis lanjutan.
+Interest Feature Sparsity,87.80% of valid interest cells are zero.,Pertimbangkan karakteristik sparse data dalam pemilihan representasi fitur.
+All-Zero Interest Profiles,1238 profiles (8.25%).,Evaluasi apakah profil tanpa informasi minat perlu dipertahankan atau dipisahkan dalam eksperimen.
+Duplicate Interest Patterns,4163 rows (27.75%).,Pola minat identik tidak otomatis merupakan duplikasi identitas siswa.
+Skewed Interest Features,36 features have absolute skewness greater than 2.,Pertimbangkan transformasi fitur sebagai salah satu eksperimen preprocessing.
