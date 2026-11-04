@@ -188,3 +188,47 @@ Pada tahap pemodelan clustering berikutnya, disarankan mengikuti panduan berikut
 ---
 *Laporan ini disusun secara otomatis berdasarkan eksekusi notebook `data_preparation.ipynb`.*
 
+---
+
+## 8. Hasil Model Development
+
+Tahap pemodelan dikerjakan pada notebook [`model_development.ipynb`](./notebooks/model_development.ipynb), menggunakan artefak preprocessing dari `outputs/preprocessing/`. Input clustering terdiri dari 36 fitur minat; atribut profil hanya digunakan sesudah pembentukan label. Representasi `log1p`-scaled dan biner dibandingkan dengan `k=2..10`. Silhouette tertinggi dengan preferensi ukuran minimum klaster 2% memilih **k=2** untuk kedua representasi.
+
+### 8.1. Evaluasi Algoritma
+
+Algoritma dibandingkan pada sampel deterministik 2.500 profil aktif. Nilai DBSCAN hanya dihitung pada inlier sehingga tidak sebanding langsung dengan metrik model lain.
+
+| Model | Klaster | Noise | Silhouette | Davies–Bouldin | Calinski–Harabasz | Ukuran klaster terkecil |
+|---|---:|---:|---:|---:|---:|---:|
+| K-Means (`log1p`-scaled) | 2 | 0% | 0,3025 | 3,2524 | 157,2216 | 14,48% |
+| K-Means (binary) | 2 | 0% | 0,1652 | 4,0514 | 127,1706 | 29,64% |
+| Agglomerative Ward | 2 | 0% | 0,4493 | 1,9042 | 99,9252 | 2,12% |
+| DBSCAN (`eps=1,3633`, `min_samples=10`) | 11 | 91,84% | 0,8145* | 0,3881* | 197,5267* | 4,90%* |
+| Gaussian Mixture (diagonal, `log1p`-scaled) | 2 | 0% | 0,2402 | 3,9331 | 117,9022 | 18,72% |
+
+*\*DBSCAN dihitung hanya untuk 204 inlier dari 2.500 profil; 2.296 profil (91,84%) diklasifikasikan sebagai noise. Skor DBSCAN yang tinggi berasal dari subset kecil/kelompok sangat rapat dan tidak mewakili cakupan populasi, sehingga DBSCAN tidak dipilih.*
+
+**Model final: K-Means (`log1p`-scaled), k=2 pada profil aktif.** Model dipilih dari kandidat yang dapat memberi assignment ke seluruh profil aktif. Di antara K-Means dan GMM, K-Means memiliki peringkat terbaik untuk Silhouette, Davies–Bouldin, dan Calinski–Harabasz, serta menghasilkan kelompok terkecil yang tidak terlalu kecil (14,48% pada sampel evaluasi). Agglomerative menunjukkan Silhouette dan Davies–Bouldin yang lebih baik pada sampel, tetapi kelompok terkecilnya hanya 2,12%, hasilnya berasal dari subset, dan estimator tersebut tidak menyediakan prediksi langsung untuk profil baru. Karena itu ia dipertahankan sebagai pembanding eksploratif, bukan artefak final.
+
+### 8.2. Profil Segmen Hasil Fit Penuh
+
+Model K-Means final di-fit pada seluruh 13.762 profil aktif. Sebanyak 1.238 profil tanpa nilai positif pada 36 minat dipertahankan sebagai `cluster_id=0`, yaitu segmen deskriptif “No recorded interests”, bukan prediksi K-Means.
+
+| Cluster | Jumlah | Proporsi dari 15.000 | Profil ringkas |
+|---:|---:|---:|---|
+| 0 | 1.238 | 8,25% | Tidak ada minat yang tercatat pada 36 fitur; median teman 4; usia imputasi rata-rata 17,40. |
+| 1 | 11.523 | 76,82% | Rata-rata hitungan tertinggi pada `music`, `god`, `dance`; median total hitungan minat 5; median 20 teman; usia imputasi rata-rata 17,28. |
+| 2 | 2.239 | 14,93% | Rata-rata hitungan tertinggi pada `hair`, `music`, `god`; median total hitungan minat 16; median 27 teman; usia imputasi rata-rata 17,00. |
+
+Di antara profil dengan gender tercatat, proporsi perempuan/laki-laki/Unknown masing-masing adalah 52,3%/23,0%/24,7% untuk cluster 0; 73,5%/18,6%/7,9% untuk cluster 1; serta 86,7%/7,9%/5,4% untuk cluster 2. Deskripsi segmen hanya merangkum agregat fitur dan tidak boleh dipakai untuk menyimpulkan sifat individu.
+
+### 8.3. Artefak Modeling
+
+- Tabel evaluasi dan pemilihan `k`: `outputs/tables/model_comparison.csv` dan `outputs/tables/k_selection_metrics.csv`.
+- Profil agregat segmen, komposisi gender, dan data profil berlabel: `outputs/tables/cluster_profile_summary.csv`, `outputs/tables/cluster_gender_profile.csv`, dan `outputs/tables/clustered_student_profiles.csv`.
+- Model terpilih: `outputs/models/best_clustering_model.joblib`.
+- Visualisasi: `outputs/figures/09_kmeans_k_selection.png`, `10_density_and_dendrogram.png`, `11_best_model_pca_clusters.png`, `12_cluster_interest_heatmap.png`, dan `13_cluster_top_interest_means.png`.
+
+### 8.4. Batasan dan Tindak Lanjut
+
+Silhouette untuk pemilihan `k` dihitung pada subsampel 2.000 dari maksimal 5.000 profil; perbandingan algoritma pada 2.500 profil, dendrogram pada 1.000, dan scatter PCA pada maksimal 5.000. PCA dua komponen hanya menjelaskan 14,46% variansi dan digunakan untuk visualisasi, bukan sebagai bukti pemisahan yang kuat. Data tidak memiliki label kebenaran atau ID siswa unik, sehingga metrik internal belum memvalidasi segmen terhadap hasil bisnis maupun identitas. DBSCAN menunjukkan tingginya noise dan tidak cocok dengan parameter uji ini. Sebelum deployment atau penggunaan dalam keputusan yang berdampak pada siswa, uji kestabilan segmen pada sampel/periode lain dan lakukan validasi domain; interpretasi demografis bersifat agregat dan terbatas.
