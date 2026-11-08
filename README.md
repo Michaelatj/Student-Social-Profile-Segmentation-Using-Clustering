@@ -46,7 +46,6 @@ File yang dipakai: `data/Clustering_Marketing.csv`. Di Kaggle, file ini bernama 
 │   └── models/                        # model tersimpan (.joblib)
 ├── reports/                           # laporan UTS (PDF)
 ├── requirements.txt
-├── requirements-lock.txt
 └── README.md
 ```
 
@@ -83,7 +82,7 @@ Baseline adalah K-Means pada representasi `log1p`-scaled dengan k=2. Profil tanp
 | K-Means (log1p-scaled) | Baseline | 2 | 0% | 0,3025 | 3,2524 | 157,2216 | 14,48% |
 | K-Means (biner) | Kandidat | 2 | 0% | 0,1652 | 4,0514 | 127,1706 | 29,64% |
 | Agglomerative Ward | Kandidat | 2 | 0% | 0,4493 | 1,9042 | 99,9252 | 2,12% |
-| DBSCAN (eps=1,37) | Kandidat | 14 | 88,00% | 0,6268* | 0,5828* | 109,0548* | 3,67%* |
+| DBSCAN (eps=1,37, min_samples=10) | Kandidat | 14 | 88,00% | 0,6268* | 0,5828* | 109,0548* | 3,67%* |
 | Gaussian Mixture (diagonal) | Kandidat | 2 | 0% | 0,2402 | 3,9331 | 117,9022 | 18,72% |
 
 *DBSCAN dihitung hanya pada 300 inlier dari 2.500 profil, sehingga skornya tidak sebanding dengan model lain.
