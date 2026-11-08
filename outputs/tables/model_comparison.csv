@@ -1,6 +1,6 @@
-model,clusters_excluding_noise,noise_share,smallest_cluster_share,silhouette,davies_bouldin,calinski_harabasz,metric_profiles,metric_scope
-K-Means (log1p-scaled),2,0.0,0.1448,0.3024526447173275,3.2523894489574903,157.22157546000457,2500,full comparison sample
-K-Means (binary),2,0.0,0.2964,0.1651983081767829,4.051420377985508,127.17060619998796,2500,full comparison sample
-Agglomerative Ward,2,0.0,0.0212,0.44925988593101945,1.9042098703481776,99.92521077938287,2500,full comparison sample
-DBSCAN,11,0.9184,0.049019607843137254,0.8145191791917433,0.3881041742853368,197.52673317785872,204,inliers only
-"Gaussian Mixture (diag, log1p-scaled)",2,0.0,0.1872,0.24022795852788267,3.933062073183466,117.9022479684102,2500,full comparison sample
+model,role,clusters_excluding_noise,noise_share,smallest_cluster_share,silhouette,davies_bouldin,calinski_harabasz,metric_profiles,metric_scope
+K-Means (log1p-scaled),Baseline,2,0.0,0.1448,0.30245264471681305,3.2523894489574903,157.22157546000463,2500,full comparison sample
+K-Means (binary),Kandidat,2,0.0,0.2964,0.16519830817600467,4.051420377985506,127.17060619998806,2500,full comparison sample
+Agglomerative Ward,Kandidat,2,0.0,0.0212,0.4492598859306865,1.9042098703481773,99.92521077938287,2500,full comparison sample
+DBSCAN,Kandidat,14,0.88,0.03666666666666667,0.6267722538886187,0.5828278232629264,109.05481433827836,300,inliers only
+"Gaussian Mixture (diag, log1p-scaled)",Kandidat,2,0.0,0.1872,0.24022795852727485,3.9330620731834656,117.9022479684102,2500,full comparison sample
